@@ -2,7 +2,7 @@ from packages_dir import app, db
 from flask import render_template, redirect, url_for, flash
 from packages_dir.models import Item, User
 from packages_dir.forms import RegisterForm, LoginForm
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 
 
 @app.route('/')
@@ -24,6 +24,7 @@ def userpage_load(username):
 
 
 @app.route('/market')
+@login_required
 def market_load():
     """
     Function loads market page.
@@ -49,6 +50,9 @@ def register_load():
                         plain_password=form.password.data)
         db.session.add(new_user)
         db.session.commit()
+        login_user(new_user)
+        flash(f'You are successfully registered! Hello, {new_user.username}!', \
+                  category='success')
         return redirect(url_for('market_load'))
     if form.errors != {}:
         for error_message in form.errors.values():
