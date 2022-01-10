@@ -41,16 +41,51 @@
                         <a class="nav-link" href="{{url_for('market_load')}}">Market</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav navbar-right">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('login_load')}}">Login</a>
+                {% if current_user.is_authenticated %}
+                    <ul class="navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('logout_load')}}">Log out</a>
+                        </li>
+                    </ul>
+                {% else %}
+                    <ul class="navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('login_load')}}">Log in</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('register_load')}}">Register</a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+        </nav>
+        {% if current_user.is_authenticated %}
+            <div style='background-color: #3e576d;'>
+                <ul class="navbar-nav mr-auto navbar-right">
+                    <li class="navbar-right">
+                        <a class="nav-link" style='color:rgb(181, 216, 202); float: right; margin-right: 2%;'>
+                            Welcome, {{current_user.username}}
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('register_load')}}">Register</a>
+                    <li class="navbar-right">
+                        <a class="nav-link" style='color:rgb(181, 216, 202); float: right; margin-right: 2%;'>
+                            Budget: {{current_user.budget_repr}}
+                        </a>
                     </li>
                 </ul>
             </div>
-        </nav>
+        {% else %}
+            <div style='background-color: #3e576d;'>
+                <ul class="navbar-nav mr-auto navbar-right">
+                    <li class="navbar-right">
+                        <a class="nav-link" style='color:rgb(181, 216, 202); float: right; margin-right: 2%;'>
+                            You are currently not logged in. Please, log in or register to use market.
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+
         {% with messages= get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}

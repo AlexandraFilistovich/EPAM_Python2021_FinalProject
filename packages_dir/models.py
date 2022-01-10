@@ -49,6 +49,25 @@ class User(db.Model, UserMixin):
         return f'User: {self.username}'
     
     @property
+    def budget_repr(self):
+        """
+        Represents budget data with thousand whitespases.
+        """
+        budget = str(self.budget)
+        budget_normalized = ''
+        length = len(budget)
+        if length >= 4:
+            for i in range(length):
+                if (i - length % 3) % 3 == 2:
+                    budget_normalized += budget[i] + ' '
+                else:
+                    budget_normalized += budget[i]
+            return f"{budget_normalized.rstrip()}$"
+        else:
+            return f"{budget}$"
+
+
+    @property
     def plain_password(self):
         """
         Getter of plain_password.

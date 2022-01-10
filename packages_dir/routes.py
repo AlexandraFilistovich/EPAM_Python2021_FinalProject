@@ -2,7 +2,7 @@ from packages_dir import app, db
 from flask import render_template, redirect, url_for, flash
 from packages_dir.models import Item, User
 from packages_dir.forms import RegisterForm, LoginForm
-from flask_login import login_user
+from flask_login import login_user, logout_user
 
 
 @app.route('/')
@@ -75,3 +75,8 @@ def login_load():
             flash('Username or password is incorrect. Please try again.', \
                   category='danger')
     return render_template('login.html', form=form)
+
+@app.route('/logout')
+def logout_load():
+    logout_user()
+    return redirect(url_for('home_load'))
