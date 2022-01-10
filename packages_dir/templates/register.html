@@ -1,0 +1,41 @@
+{% extends 'template.html' %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block body %}
+    <body class='text-center'>
+        <div class='container'>
+            <form method='POST' class='form-registration' style='color:white'>
+                {{ form.hidden_tag() }}
+                <h1 class='h3 mb-4 font-weight-normal'>
+                    Please create your account
+                </h1>
+                <br>
+
+                {{ form.username.label() }}
+                {{ form.username(class='form-control', placeholder='User Name') }}
+
+                {{ form.email.label() }}
+                {{ form.email(class='form-control', placeholder='Email Adress') }}
+
+                {{ form.password.label() }}
+                {{ form.password(class='form-control', placeholder='Password') }}
+
+                {{ form.password_check.label() }}
+                {{ form.password_check(class='form-control', placeholder='Repeat password') }}
+                
+                <br>
+                {{ form.submit(class='btn btn-lg btn-block btn-danger') }}
+
+                <div class='cointainer mb-3'>
+                    <br>
+                    <br>
+                    <h1 class='h6 mb-4'>Already have an account?</h1>
+                    <a class='btn btn-sm btn-secondary' href='{{url_for("login_load")}}'>Log in</a>
+                </div>
+            </form>
+        </div>
+    </body>
+{% endblock %}
