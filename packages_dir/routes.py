@@ -1,8 +1,8 @@
 from packages_dir import app, db
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from packages_dir.models import Item, User
-from packages_dir.forms import RegisterForm, LoginForm
-from flask_login import login_user, logout_user, login_required
+from packages_dir.forms import RegisterForm, LoginForm, PurchaseForm, SellForm
+from flask_login import login_user, logout_user, login_required, current_user
 
 
 @app.route('/')
@@ -23,7 +23,7 @@ def userpage_load(username):
 '''
 
 
-@app.route('/market')
+@app.route('/market', methods = ['GET', 'POST'])
 @login_required
 def market_load():
     """
@@ -31,8 +31,38 @@ def market_load():
 
     :return: page render
     """
-    items = Item.query.all()
-    return render_template('market.html', args=items)
+    sell_form = SellForm()
+    purchase_form = PurchaseForm()
+
+    if request.method == "POST":
+        # Purchase item.
+        purchased_item = request.form.get('purchased_item')
+        item_instance = Item.query.filter_by(name=purchased_item).first()
+        if item_instance:
+            if current_user.budget_check(item_instance):
+                item_instance.buy_by(current_user)
+                flash(f'Successfully purchased!', \
+                        category='success')
+            else:
+                flash(f'You do not have enough money to buy this item!', \
+                        category='danger')
+        
+        # Sell item.
+        sold_item = request.form.get('sell_item')
+        item_instance = Item.query.filter_by(name=sold_item).first()
+        if item_instance:
+            item_instance.sell_by(current_user)
+            flash(f'Successfully sold!', \
+                        category='success')
+        return redirect(url_for('market_load'))
+    
+    if request.method == "GET":
+        items = Item.query.filter_by(owner=None)
+        items_owned = Item.query.filter_by(owner=current_user.id)
+        return render_template('market.html', items=items, \
+                                items_owned=items_owned, \
+                                purchase_form=purchase_form, \
+                                sell_form=sell_form)
  
 
 @app.route('/register', methods = ['GET', 'POST'])
@@ -60,6 +90,7 @@ def register_load():
                   category='danger')
     return render_template('register.html', form=form)
 
+
 @app.route('/login', methods = ['Get', 'POST'])
 def login_load():
     """
@@ -80,7 +111,14 @@ def login_load():
                   category='danger')
     return render_template('login.html', form=form)
 
+
 @app.route('/logout')
 def logout_load():
     logout_user()
     return redirect(url_for('home_load'))
+
+@app.route('/m')
+def money_load():
+    current_user.budget += 1000
+    db.session.commit()
+    return redirect(url_for('market_load'))

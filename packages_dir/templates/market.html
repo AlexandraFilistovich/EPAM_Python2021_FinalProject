@@ -5,30 +5,65 @@
 {% endblock %}
 
 {% block body %}
-    <h1 style='margin-top: 1%;'>Market place.</h1>
-    <table class="table table-hover table-dark">
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Barcode</th>
-                <th scope="col">Price</th>
-                <th scope="col">Options</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in args %}
-                <tr>
-                    <td>{{item.id}}</td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.barcode}}</td>
-                    <td>{{item.price}}$</td>
-                    <td>
-                        <button class="btn btn-outline btn-danger"><i class="fa fa-info-circle" style="font-size:18px"></i></button>
-                        <button class="btn btn-outline btn-success">Purchase</button>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <h1 style="margin-top: 1%; margin-left: 1%;"> Market place.</h1>
+    <div class="row" style="margin-top: 1%; margin-right: 1%; margin-left: 1%;">
+        <div class="col-8">
+            <h1 class="h5" style="margin-top: 1%;">Available to buy</h1>
+            <table class="table table-hover table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Performer</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    {% include 'includes/modals.html' %}
+                        <tr>
+                            <td>{{item.id}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.performer}}</td>
+                            <td>{{item.price}}$</td>
+                            <td>
+                                <button class="btn btn-outline btn-danger" data-toggle="modal" data-target="#modal-info-{{ item.id }}">
+                                    <i class="fa fa-info-circle" style="font-size:18px"></i>
+                                </button>
+                                <button class="btn btn-outline btn-success"  data-toggle="modal" data-target="#modal-purchase-{{ item.id }}">Purchase</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4">
+            <h1 class="h5" style="margin-top: 1%;">Owned songs</h1>
+            <table class="table table-hover table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Performer</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item_owned in items_owned%}
+                    {% include 'includes/modals_owned.html' %}
+                        <tr>
+                            <td>{{item_owned.name}}</td>
+                            <td>{{item_owned.performer}}</td>
+                            <td>{{item_owned.price}}$</td>
+                            <td>
+                                <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#modal-sell-{{ item_owned.id }}">Sell</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
 {% endblock %}

@@ -72,6 +72,11 @@
                             Budget: {{current_user.budget_repr}}
                         </a>
                     </li>
+                    <li class="navbar-right">
+                        <a class="nav-link" href="{{url_for('money_load')}}" style='color:rgb(181, 216, 202); float: right; margin-right: 2%;'>
+                            Add money exploit
+                        </a>
+                    </li>
                 </ul>
             </div>
         {% else %}

@@ -80,4 +80,10 @@ class LoginForm(FlaskForm):
                         validators=[DataRequired()])
     submit = SubmitField(label='Log in')
 
-    
+
+class PurchaseForm(FlaskForm):
+    submit = SubmitField(label='Purchase')
+
+
+class SellForm(FlaskForm):
+    submit = SubmitField(label='Sell')

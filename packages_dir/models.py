@@ -28,6 +28,7 @@ class User(db.Model, UserMixin):
         plain_password.getter
         plain_password.setter
         check_password_input
+        budget_check
     """
     id = db.Column(db.Integer(), primary_key=True)
     username = db.Column(db.String(length=30), \
@@ -95,6 +96,9 @@ class User(db.Model, UserMixin):
         :return: True if password is correct, otherwise returns False.
         """
         return bcrypt.check_password_hash(self.password, input_password)
+    
+    def budget_check(self, item):
+        return self.budget - item.price >= 0
 
 
 class Item(db.Model):
@@ -105,17 +109,18 @@ class Item(db.Model):
         id: primary key
         name
         price
-        barcode
+        performer
         description
         owner: foreign key to User table
 
     ___Relationships___
-        owned_used
+        owned_user
     
     ___Methods___
         __repr__
         plain_password.getter
         plain_password.setter
+        buy_by
     """
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(length=30), \
@@ -123,9 +128,8 @@ class Item(db.Model):
                     unique=True)
     price = db.Column(db.Integer(), \
                       nullable=False)
-    barcode = db.Column(db.String(length=12), \
-                        nullable=False, \
-                        unique=True)
+    performer = db.Column(db.String(length=30), \
+                    nullable=False)
     description = db.Column(db.String(length=1024), \
                             nullable=False, \
                             unique=False)
@@ -133,3 +137,14 @@ class Item(db.Model):
 
     def __repr__(self):
         return f'Item: {self.name}'
+    
+    def buy_by(self, user):
+        self.owner = user.id
+        user.budget -= self.price
+        self.price -= self.price // 10
+        db.session.commit()
+    
+    def sell_by(self, user):
+        user.budget += self.price
+        self.owner = None
+        db.session.commit()
