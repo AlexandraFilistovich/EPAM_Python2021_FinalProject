@@ -1,6 +1,5 @@
-from market_app import db, bcrypt,login_manager
-from sqlalchemy.orm import backref
 from flask_login import UserMixin
+from market_app import db, bcrypt,login_manager
 
 
 @login_manager.user_loader

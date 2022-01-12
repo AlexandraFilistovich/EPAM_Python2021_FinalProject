@@ -1,5 +1,6 @@
 from market_app import db
-from market_app.models import Item, User
+from market_app.models.user_model import User
+from market_app.models.item_model import Item
 
 
 db.drop_all()
