@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # Additional temporary files
-requirements.txt
+/temporary
