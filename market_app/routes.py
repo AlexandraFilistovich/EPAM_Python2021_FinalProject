@@ -1,7 +1,10 @@
-from packages_dir import app, db
+from market_app import app, db
 from flask import render_template, redirect, url_for, flash, request
-from packages_dir.models import Item, User
-from packages_dir.forms import RegisterForm, LoginForm, PurchaseForm, SellForm
+from market_app.models.user_model import User
+from market_app.models.item_model import Item
+from market_app.service.user_service import budget_check, check_password_input
+from market_app.service.item_service import buy_by, sell_by
+from market_app.forms import RegisterForm, LoginForm, PurchaseForm, SellForm
 from flask_login import login_user, logout_user, login_required, current_user
 
 
@@ -39,8 +42,8 @@ def market_load():
         purchased_item = request.form.get('purchased_item')
         item_instance = Item.query.filter_by(name=purchased_item).first()
         if item_instance:
-            if current_user.budget_check(item_instance):
-                item_instance.buy_by(current_user)
+            if budget_check(current_user, item_instance):
+                buy_by(item_instance, current_user)
                 flash(f'Successfully purchased!', \
                         category='success')
             else:
@@ -51,7 +54,7 @@ def market_load():
         sold_item = request.form.get('sell_item')
         item_instance = Item.query.filter_by(name=sold_item).first()
         if item_instance:
-            item_instance.sell_by(current_user)
+            sell_by(item_instance, current_user)
             flash(f'Successfully sold!', \
                         category='success')
         return redirect(url_for('market_load'))
@@ -100,7 +103,7 @@ def login_load():
     form = LoginForm()
     if form.validate_on_submit():
         input_user = User.query.filter_by(username=form.username.data).first()
-        if input_user and input_user.check_password_input(
+        if input_user and check_password_input(user=input_user,
                                      input_password=form.password.data):
             login_user(input_user)
             flash(f'You are successfully logged in! Hello, {input_user.username}!', \

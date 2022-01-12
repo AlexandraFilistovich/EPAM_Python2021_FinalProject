@@ -1,5 +1,5 @@
-from packages_dir import db
-from packages_dir.models import Item, User
+from market_app import db
+from market_app.models import Item, User
 
 
 db.drop_all()

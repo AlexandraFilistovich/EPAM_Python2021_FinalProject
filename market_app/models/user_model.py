@@ -1,5 +1,5 @@
+from market_app import db, bcrypt,login_manager
 from sqlalchemy.orm import backref
-from packages_dir import db, bcrypt, login_manager
 from flask_login import UserMixin
 
 
@@ -49,7 +49,6 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f'User: {self.username}'
     
-    @property
     def budget_repr(self):
         """
         Represents budget data with thousand whitespases.
@@ -66,7 +65,6 @@ class User(db.Model, UserMixin):
             return f"{budget_normalized.rstrip()}$"
         else:
             return f"{budget}$"
-
 
     @property
     def plain_password(self):
@@ -86,65 +84,3 @@ class User(db.Model, UserMixin):
         :return: None
         """
         self.password = bcrypt.generate_password_hash(plain_text_password).decode('utf-8')
-    
-    def check_password_input(self, input_password):
-        """
-        Function checks entered in login form password is 
-        same to stored in table encrypted password.
-
-        :param input_password: password entered by user
-        :return: True if password is correct, otherwise returns False.
-        """
-        return bcrypt.check_password_hash(self.password, input_password)
-    
-    def budget_check(self, item):
-        return self.budget - item.price >= 0
-
-
-class Item(db.Model):
-    """
-    Item of shop database table.
-
-    ___Columns___
-        id: primary key
-        name
-        price
-        performer
-        description
-        owner: foreign key to User table
-
-    ___Relationships___
-        owned_user
-    
-    ___Methods___
-        __repr__
-        plain_password.getter
-        plain_password.setter
-        buy_by
-    """
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(length=30), \
-                    nullable=False, \
-                    unique=True)
-    price = db.Column(db.Integer(), \
-                      nullable=False)
-    performer = db.Column(db.String(length=30), \
-                    nullable=False)
-    description = db.Column(db.String(length=1024), \
-                            nullable=False, \
-                            unique=False)
-    owner = db.Column(db.Integer(), db.ForeignKey('user.id'))
-
-    def __repr__(self):
-        return f'Item: {self.name}'
-    
-    def buy_by(self, user):
-        self.owner = user.id
-        user.budget -= self.price
-        self.price -= self.price // 10
-        db.session.commit()
-    
-    def sell_by(self, user):
-        user.budget += self.price
-        self.owner = None
-        db.session.commit()
