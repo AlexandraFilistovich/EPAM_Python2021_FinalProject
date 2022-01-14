@@ -1,4 +1,4 @@
-from packages_dir import app
+from market_app import app
 
 
 if __name__ == '__main__':
