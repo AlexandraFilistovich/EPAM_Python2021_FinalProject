@@ -1,15 +1,14 @@
 from setuptools import setup, find_packages
 
-
-setup(name="MusicMarket", \
-    version="1.0", \
-    packages=find_packages() + \
-        find_packages(where="./market_app/forms") + \
-        find_packages(where="./market_app/models") + \
-        find_packages(where="./market_app/service") + \
-        find_packages(where="./market_app/database") + \
-        find_packages(where="./market_app/views"), \
-    #packages=find_packages() + find_packages(where="./market_app"), \
-    scripts=["execute.py"], \
-    include_package_data=True, \
-    package_data={"templates":["market_app/templates/*"],"static":["market_app/static/*"]})
+setup(
+    name='Market App',
+    version='1.0',
+    author='Filistovich Oleksandra',
+    author_email='alexandrafilistovich@gmail.com',
+    description='Web application to manage employees and departments using '
+                'web service',
+    url='https://github.com/OleksandraFilistovich/EPAM_Python2021_FinalProject/tree/migrations_dev',
+    packages=find_packages(),
+    include_package_data=True,
+    zip_safe=False
+)
