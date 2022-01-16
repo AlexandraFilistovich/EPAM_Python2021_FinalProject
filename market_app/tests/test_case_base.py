@@ -18,7 +18,7 @@ class TestCaseBase(unittest.TestCase):
         
         user = User(username='test_user', email='test_user@gmail.com', plain_password='qwerty1')
         item1 = Item(name='Song1', performer='Performer1', price=500, description='Description of song1.')
-        item2 = Item(name='Song2', performer='Performer2', price=1000, description='Description of song2.')
+        item2 = Item(name='Song2', performer='Performer2', price=1100, description='Description of song2.')
 
         db.session.add(user)
         db.session.add(item1)
