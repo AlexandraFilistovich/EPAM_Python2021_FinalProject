@@ -17,7 +17,7 @@ item8 = Item(name="My Type", price=110, performer="Saint Motel", description="Ge
 item9 = Item(name="A Good Song Never Dies", price=250, performer="Saint Motel", description="Genre: Alternative/Indie, Pop. 2021 year.")
 item10 = Item(name="Dangerous", price=50, performer="Big Data", description="Genre: Alternative/Indie. 2014 year.")
 
-new_user = User(username='test_user', email='test_user@gmail.com', plain_password='qwerty1')
+new_user = User(username='Sasha', email='alexafiliho@gmail.com', plain_password='qwerty1')
 
 db.session.add(item1)
 db.session.add(item2)
