@@ -1,4 +1,4 @@
-# EPAM Python Autumn 2021 final project - Market App
+# EPAM Python 2022 final project - Market App
 
 
 
